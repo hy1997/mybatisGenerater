@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/car?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    name: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+
+
+generate:
+  path: /src/main/java/com/huyi/mybatisgenerate/demo/po/
