@@ -9,12 +9,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
- * 辽宁捷畅物流有限公司 -信息技术中心
- * <p>
- * 时间工具类
- *
- * @author 臧英明
- * @create 2017-11-25
+
  */
 public abstract class DateUtils {
     // 各种时间格式
