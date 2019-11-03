@@ -5,6 +5,6 @@ spring:
     password: root
     driver-class-name: com.mysql.jdbc.Driver
 
-##生成Java文件路径！ 需从src开始！
+##生成Java文件路径！ 需从src开始！11
 generate:
   path: /src/main/java/com/huyi/mybatisgenerate/demo/po/
