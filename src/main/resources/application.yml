@@ -7,4 +7,4 @@ spring:
 
 ##生成Java文件路径！ 需从src开始！
 generate:
-  path: /src/main/java/com/huyi/mybatisgenerate/demo/po/
+  path: /src/main/java/com/huyi/demo/po/

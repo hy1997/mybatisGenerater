@@ -71,12 +71,13 @@ public class Assemble {
      */
     public void readJaveFile(String buffer, String tableName) throws IOException {
         //获取到得到工程的路径
-        String property = System.getProperty("user.dir");
-        File file = new File(property + path);
+        String filePath = System.getProperty("user.dir")+path;
+        File file = new File(filePath);
         if (!file.exists()) {//如果文件夹不存在
-            file.mkdir();//创建文件夹
+            boolean mkdir = file.mkdirs();//创建文件夹
+            System.out.println(mkdir);
         }
-        BufferedWriter bw = new BufferedWriter(new FileWriter(property + path + tableName + ".java"));
+        BufferedWriter bw = new BufferedWriter(new FileWriter(filePath+ tableName + ".java"));
         bw.write(buffer);
         bw.close();
         logger.info("===============================================+" + tableName + "+。Java代码生成成功===============================================！");
