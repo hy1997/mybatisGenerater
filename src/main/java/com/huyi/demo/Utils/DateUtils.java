@@ -1,4 +1,4 @@
-package com.huyi.mybatisgenerate.demo.Utils;
+package com.huyi.demo.Utils;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;

@@ -1,4 +1,4 @@
-package com.huyi.mybatisgenerate.demo.Utils;
+package com.huyi.demo.Utils;
 
 /**
  * 辽宁捷畅物流有限公司 -信息技术中心

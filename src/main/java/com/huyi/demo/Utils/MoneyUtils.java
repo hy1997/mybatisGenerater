@@ -1,4 +1,4 @@
-package com.huyi.mybatisgenerate.demo.Utils;/**
+package com.huyi.demo.Utils;/**
  * Created by nidaye on 2018/11/13.
  */
 

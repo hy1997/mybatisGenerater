@@ -1,6 +1,6 @@
 package com.huyi.demo.generate;
 
-import com.huyi.mybatisgenerate.demo.Utils.StringUtils;
+import com.huyi.demo.Utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

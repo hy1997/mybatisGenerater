@@ -1,4 +1,4 @@
-package com.huyi.mybatisgenerate.demo.Utils;
+package com.huyi.demo.Utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
