@@ -3,12 +3,9 @@ package com.huyi.demo.Utils;
 import java.security.MessageDigest;
 
 /**
- * 辽宁捷畅物流有限公司 -信息技术中心
  * <p>
  * MD5生成工具
  *
- * @author 臧英明
- * @create 2017-11-19
  */
 public abstract class MD5Util {
     /**

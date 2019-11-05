@@ -1,6 +1,4 @@
-package com.huyi.demo.Utils;/**
- * Created by nidaye on 2018/11/13.
- */
+package com.huyi.demo.Utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,9 +7,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 /**
- * 辽宁捷畅物流有限公司 -信息技术中心
- * 臧英明
- *
  * @author
  * @create 2018-11-13
  */

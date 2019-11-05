@@ -8,9 +8,13 @@ import org.springframework.context.annotation.Configuration;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 public class DataSourceConfig {
+
+    private Map<String,Connection> cacheConnection =new HashMap<String, Connection>();
 
     @Autowired
     DataSourceProperties dataSource;
@@ -22,8 +26,11 @@ public class DataSourceConfig {
         String user = dataSource.getName();
         String password = dataSource.getPassword();
         Connection conn = null;
-        if (conn == null) {
+        if (cacheConnection .containsKey("conn")) {
+            conn=cacheConnection.get("conn");
+        }else{
             conn = DriverManager.getConnection(url, user, password);
+            cacheConnection.put("conn",conn);
         }
         return conn;
     }

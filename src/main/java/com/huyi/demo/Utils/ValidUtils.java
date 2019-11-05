@@ -1,12 +1,6 @@
 package com.huyi.demo.Utils;
 
 /**
- * 辽宁捷畅物流有限公司 -信息技术中心
- * <p>
- * 验证工具
- *
- * @author 臧英明
- * @create 2017-11-21
  */
 public abstract class ValidUtils {
     private static final String mobile = "^(13|15|18|17|16)[0-9]{9}$";

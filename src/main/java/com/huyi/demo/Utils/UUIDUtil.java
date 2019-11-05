@@ -3,12 +3,8 @@ package com.huyi.demo.Utils;
 import java.util.UUID;
 
 /**
- * 辽宁捷畅物流有限公司 -信息技术中心
  * <p>
  * UUID生成工具
- *
- * @author 臧英明
- * @create 2017-11-19
  */
 public abstract class UUIDUtil {
     /**

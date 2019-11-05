@@ -7,8 +7,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 
 @SpringBootApplication
 public class MybatisgenerateApplication {
-    @Autowired
-    DataSourceProperties dataSource;
+
 
 
     public static void main(String[] args) {

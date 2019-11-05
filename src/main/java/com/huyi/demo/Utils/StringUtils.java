@@ -1,12 +1,6 @@
 package com.huyi.demo.Utils;
 
 /**
- * 辽宁捷畅物流有限公司 -信息技术中心
- * <p>
- * String工具类
- *
- * @author 臧英明
- * @create 2017-11-15
  */
 public abstract class StringUtils {
     public static final String SPLIT_SQL = ",";

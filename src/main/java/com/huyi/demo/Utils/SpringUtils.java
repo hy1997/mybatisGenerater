@@ -8,12 +8,7 @@ import org.springframework.context.ApplicationContextAware;
 import java.util.Map;
 
 /**
- * 辽宁捷畅物流有限公司 -信息技术中心
  * <p>
- * Spring提供获取Bean的工具
- *
- * @author 臧英明
- * @create 2017-11-17
  */
 public class SpringUtils implements ApplicationContextAware {
     private static ApplicationContext applicationContext;
