@@ -1,6 +1,7 @@
 package com.huyi.demo.generate;
 
 import com.huyi.demo.Utils.StringUtils;
+import com.huyi.demo.generateData.CommonComponent;
 import com.huyi.demo.generateData.GenerateJavaFile;
 import com.huyi.demo.generateData.GenerateJavaInterface;
 import org.slf4j.Logger;
@@ -26,17 +27,15 @@ import java.util.concurrent.locks.Lock;
 public class Assemble {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Value("${myProps.path}")
-    String path;
 
     @Autowired
     GenerateJavaFile generateJavaFile;
 
     @Autowired
+    CommonComponent comm;
+
+    @Autowired
     GenerateJavaInterface generateJavaInterface;
-
-
-
 
     /**
      * @param dataBaseType 数据库类型
@@ -47,7 +46,7 @@ public class Assemble {
      * @throws IOException
      */
     public void generateJvavaClass(String dataBaseType, ResultSet resultSet, String dataBas) throws SQLException, IOException {
-        logger.info("===============================================开始生成：" + dataBas + "数据库下表数据 接口！===============================================");
+        logger.info("开始生成：" + dataBas + "数据库下表数据 接口！");
         StringBuffer stringBuffer = null;
         try {
             while (resultSet.next()) {
@@ -56,23 +55,12 @@ public class Assemble {
                 //获取到查询数据库下所有表 sql
                 String queryTableSql = GenerateUtils.select(dataBaseType, GenerateConstant.COLUMN, tableName, dataBas);
                 //生成表
-                generateJavaFile.generateDate(generateJavaFile.assembly(tableName, queryTableSql),tableName);
+                comm.generateDate(comm.setGenerateData(generateJavaFile).assembly(tableName, queryTableSql),tableName);
                 //生成的接口
-                generateJavaInterface.generateDate(generateJavaInterface.assembly( tableName, null),tableName);
+                comm.generateDate(comm.setGenerateData(generateJavaInterface).assembly(tableName, queryTableSql),tableName);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
-    /**
-     * @param subPath       生成的路径
-     * @param tableName     生成的表名
-     * @param queryTableSql 查询表数据的sql
-     * @return
-     * @throws SQLException
-     */
-
-
-
 }

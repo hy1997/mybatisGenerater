@@ -16,9 +16,6 @@ import java.io.IOException;
 public class GenerateJavaInterface extends GenerateDataCommon {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Value("${myProps.interfacePath}")
-    String interfacePath;
-
 
 
     @Override
@@ -54,20 +51,5 @@ public class GenerateJavaInterface extends GenerateDataCommon {
         return stringBuilder.toString();
     }
 
-    @Override
-    public void generateDate(String data, String tableName) throws IOException {
-        if(StringUtils.isNotEmpty(interfacePath)){
-            String filePath = System.getProperty("user.dir") + interfacePath;
-            File file = new File(filePath);
-            if (!file.exists()) {//如果文件夹不存在
-                boolean mkdir = file.mkdirs();//创建文件夹
-                System.out.println(mkdir);
-            }
-            BufferedWriter bw = new BufferedWriter(new FileWriter(filePath + GenerateUtils.toTable(tableName) + "Mapper.java"));
-            bw.write(data);
-            bw.close();
-        }else{
-            new Exception("需要生成的Java文件路径不存在！");
-        }
-    }
+
 }

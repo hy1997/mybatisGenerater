@@ -46,22 +46,5 @@ public class GenerateJavaFile extends GenerateDataCommon {
 
     }
 
-    @Override
-    public void generateDate(String data, String tableName) throws IOException {
-        //获取到得到工程的路径
-        if(StringUtils.isNotEmpty(path)){
-            String filePath = System.getProperty("user.dir") + path;
-            File file = new File(filePath);
-            if (!file.exists()) {//如果文件夹不存在
-                boolean mkdir = file.mkdirs();//创建文件夹
-                System.out.println(mkdir);
-            }
-            BufferedWriter bw = new BufferedWriter(new FileWriter(filePath + GenerateUtils.toTable(tableName) + ".java"));
-            bw.write(data);
-            bw.close();
-        }else{
-            new Exception("需要生成的Java文件路径不存在！");
-        }
 
-    }
 }

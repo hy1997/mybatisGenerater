@@ -27,13 +27,13 @@ public class GenerateService {
         try {
             DatabaseMetaData metaData = conn.getMetaData();
             String dataBaseType = metaData.getDatabaseProductName();
-            logger.info("===============================================连接的数据类型为：" + dataBaseType + "===============================================");
+            logger.info("连接的数据类型为：" + dataBaseType);
             dataBas = conn.getCatalog();
-            logger.info("===============================================连接的数据库名称为：" + dataBas + "===============================================");
+            logger.info("连接的数据库名称为：" + dataBas );
             String sql = GenerateUtils.select(dataBaseType, GenerateConstant.TABLES, dataBas);
-            logger.info("===============================================获取到查询数据库下所有表SQL：" + sql + "===============================================");
+            logger.info("获取到查询数据库下所有表SQL：" + sql );
             resultSet = GenerateUtils.getResultSet(conn, sql);
-            logger.info("===============================================获取到结果集：" + resultSet + "===============================================");
+            logger.info("获取到结果集：" + resultSet );
             assemble.generateJvavaClass(dataBaseType, resultSet, dataBas);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -43,7 +43,6 @@ public class GenerateService {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
         }
         return dataBas;
     }
