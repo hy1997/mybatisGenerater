@@ -1,10 +1,30 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/car?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/ruimoa?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
     name: root
     password: root
     driver-class-name: com.mysql.jdbc.Driver
 
-##生成Java文件路径！ 需从src开始！
-generate:
-  path: /src/main/java/com/huyi/demo/po/
+
+#生成Java文件路径！ 需从src开始！
+#  是否需要字段的备注
+#myProps:
+#  generateMap: {path: ,memoField: 'true',interfacePath: '/src/main/java/com/huyi/demo/mapper/'}
+
+
+myProps:
+    path: '/src/main/java/com/huyi/demo/po/'
+    interfacePath: '/src/main/java/com/huyi/demo/mapper/'
+    memoField: true
+
+
+
+
+#generate:
+#  path:
+##  是否需要字段的备注
+#  memoField: true
+#
+#  interfacePath:
+
+

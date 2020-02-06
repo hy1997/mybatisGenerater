@@ -12,6 +12,12 @@ import java.sql.SQLException;
 public class GenerateUtils {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * 生成字段名称 首字母不用大写
+     *
+     * @param str
+     * @return
+     */
     public static String toUpper(String str) {
         if (str != null) {
             StringBuffer buffer = new StringBuffer();
@@ -30,6 +36,32 @@ public class GenerateUtils {
         }
         return str;
     }
+
+    /**
+     * 生成类名称
+     *
+     * @param str
+     * @return
+     */
+    public static String toTable(String tableName) {
+        if (tableName != null) {
+            StringBuffer buffer = new StringBuffer();
+//          先全部变小写
+            String lowerCaseTableName = tableName.toLowerCase();
+            if (lowerCaseTableName.contains("_")) {// 包含下划线
+                String[] subTables = lowerCaseTableName.split("_");
+                for (String subTable : subTables) {
+                    // 首字母变大写
+                    buffer.append(subTable.substring(0, 1).toUpperCase() + subTable.substring(1, subTable.length()));
+                }
+                return buffer.toString();
+            } else {
+                return lowerCaseTableName;
+            }
+        }
+        return tableName;
+    }
+
 
     public static String toTypeByName(ResultSet rSet, String name) throws SQLException {
         while (rSet.next()) {

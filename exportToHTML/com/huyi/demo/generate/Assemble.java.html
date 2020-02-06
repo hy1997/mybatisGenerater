@@ -1,0 +1,189 @@
+<html>
+<head>
+<title>Assemble.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000080; font-weight: bold;}
+.s1 { color: #000000;}
+.s2 { color: #008000; font-weight: bold;}
+.s3 { color: #808080; font-style: italic;}
+.s4 { color: #808080; font-weight: bold; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Assemble.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span>com.huyi.demo.generate;
+
+<span class="s0">import </span>org.slf4j.Logger;
+<span class="s0">import </span>org.slf4j.LoggerFactory;
+<span class="s0">import </span>org.springframework.beans.factory.annotation.Autowired;
+<span class="s0">import </span>org.springframework.beans.factory.annotation.Value;
+<span class="s0">import </span>org.springframework.boot.context.properties.ConfigurationProperties;
+<span class="s0">import </span>org.springframework.stereotype.Component;
+
+<span class="s0">import </span>java.io.BufferedWriter;
+<span class="s0">import </span>java.io.File;
+<span class="s0">import </span>java.io.FileWriter;
+<span class="s0">import </span>java.io.IOException;
+<span class="s0">import </span>java.sql.Connection;
+<span class="s0">import </span>java.sql.ResultSet;
+<span class="s0">import </span>java.sql.SQLException;
+<span class="s0">import </span>java.util.ArrayList;
+<span class="s0">import </span>java.util.HashMap;
+<span class="s0">import </span>java.util.List;
+<span class="s0">import </span>java.util.Map;
+
+@Component
+<span class="s0">public class </span>Assemble {
+    <span class="s0">private </span>Logger logger = LoggerFactory.getLogger(<span class="s0">this</span>.getClass());
+
+    @Autowired
+    Connection conn;
+
+    @Value(<span class="s2">&quot;${myProps.path}&quot;</span>)
+     String path;
+
+    @Value(<span class="s2">&quot;${myProps.interfacePath}&quot;</span>)
+     String interfacePath;
+
+    @Value(<span class="s2">&quot;${myProps.memoField}&quot;</span>)
+     String  memoField;
+
+    <span class="s3">/**</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">dataBaseType 数据库类型</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">resultSet    查询结果集</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">dataBas      数据库名称</span>
+     <span class="s3">* </span><span class="s4">@return</span>
+     <span class="s3">* </span><span class="s4">@throws </span><span class="s3">SQLException</span>
+     <span class="s3">* </span><span class="s4">@throws </span><span class="s3">IOException</span>
+     <span class="s3">*/</span>
+    <span class="s0">public void </span>generateJvavaClass(String dataBaseType, ResultSet resultSet, String dataBas) <span class="s0">throws </span>SQLException, IOException {
+        logger.info(<span class="s2">&quot;===============================================开始生成：&quot; </span>+ dataBas + <span class="s2">&quot;数据库下表数据 接口！===============================================&quot;</span>);
+        StringBuffer stringBuffer = <span class="s0">null</span>;
+        <span class="s0">try </span>{
+            String subPath = GenerateUtils.subPath(path, <span class="s2">&quot;com&quot;</span>);
+            <span class="s0">while </span>(resultSet.next()) {
+                <span class="s3">// 获取到 resultSet 结果集下的表名</span>
+                String tableName = resultSet.getString(<span class="s2">&quot;TABLE_NAME&quot;</span>);
+                <span class="s3">//获取到查询数据库下所有表 sql</span>
+                String queryTableSql = GenerateUtils.select(dataBaseType, GenerateConstant.COLUMN, tableName, dataBas);
+                <span class="s3">//生成表</span>
+                String tableData = getTaleDataByTableName(subPath, tableName, queryTableSql);
+                <span class="s3">//生成的接口</span>
+                String interfaceData= getInterfaceByTableName(subPath, tableName, queryTableSql);
+                readJaveFile(tableData, GenerateUtils.toUpper(tableName),interfaceData);
+            }
+        } <span class="s0">catch </span>(SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+<span class="s3">//    public static StringBuffer generaterJvavaBean(List&lt;ResultSet&gt; rSets) throws SQLException {</span>
+<span class="s3">//        StringBuffer buffer = new StringBuffer();</span>
+<span class="s3">//        ResultSet rSet = rSets.get(0);</span>
+<span class="s3">//        ResultSet rSet1 = rSets.get(1);</span>
+<span class="s3">//        while (rSet.next()) {</span>
+<span class="s3">//            buffer.append(&quot;public &quot; + GenerateUtils.toTypeByName(rSet1, rSet.getString(&quot;COLUMN_NAME&quot;)) + GenerateUtils.toUpper(rSet.getString(&quot;COLUMN_NAME&quot;)) + &quot;;     //&quot; + rSet.getString(&quot;COMMENTS&quot;));</span>
+<span class="s3">//            buffer.append(&quot;\r\n&quot;);</span>
+<span class="s3">//        }</span>
+<span class="s3">//        return buffer;</span>
+<span class="s3">//    }</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">buffer    生成的表文件</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">tableName tableName 表名称</span>
+     <span class="s3">* </span><span class="s4">@throws </span><span class="s3">IOException</span>
+     <span class="s3">*/</span>
+    <span class="s0">public void </span>readJaveFile(String data, String tableName,String interfaceData) <span class="s0">throws </span>IOException {
+        <span class="s3">//获取到得到工程的路径</span>
+        String filePath = System.getProperty(<span class="s2">&quot;user.dir&quot;</span>) + path;
+        String memoField = System.getProperty(<span class="s2">&quot;user.dir&quot;</span>) + interfacePath;
+        List&lt;String&gt; listPaths= <span class="s0">new </span>ArrayList();
+        listPaths.add(filePath);
+        listPaths.add(memoField);
+        <span class="s0">for </span>(String listPath:listPaths ) {
+            <span class="s0">this</span>.readFile(data,listPath,tableName);
+            <span class="s0">this</span>.readFile(interfaceData,listPath,tableName);
+
+        }
+        }
+
+    <span class="s3">/**</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">subPath       生成的路径</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">tableName     生成的表名</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">queryTableSql 查询表数据的sql</span>
+     <span class="s3">* </span><span class="s4">@return</span>
+     <span class="s3">* </span><span class="s4">@throws </span><span class="s3">SQLException</span>
+     <span class="s3">*/</span>
+    <span class="s0">public </span>String getTaleDataByTableName(String subPath, String tableName, String queryTableSql) <span class="s0">throws </span>SQLException {
+        StringBuffer stringBuffer = <span class="s0">new </span>StringBuffer();
+        <span class="s3">//执行sql</span>
+        ResultSet resultSet = GenerateUtils.getResultSet(conn, queryTableSql);
+        logger.info(<span class="s2">&quot;===============================================生成的路径：+&quot; </span>+ subPath + <span class="s2">&quot;===============================================！&quot;</span>);
+        stringBuffer.append(<span class="s2">&quot;package  &quot; </span>+ subPath.toString() + <span class="s2">&quot;</span><span class="s0">\r\n</span><span class="s2">&quot; </span>+ <span class="s2">&quot;</span><span class="s0">\r\n</span><span class="s2">&quot; </span>+ <span class="s2">&quot;</span><span class="s0">\r\n</span><span class="s2">&quot;</span>);
+        stringBuffer.append(<span class="s2">&quot;public  class &quot; </span>+ GenerateUtils.toUpper(tableName) + <span class="s2">&quot;{&quot;</span>);
+        <span class="s0">while </span>(resultSet.next()) {
+<span class="s3">//            是否需要字段备注</span>
+            <span class="s0">if</span>(<span class="s2">&quot;true&quot;</span>.equals(memoField)){
+                stringBuffer.append(<span class="s2">&quot;</span><span class="s0">\r\n</span><span class="s2">&quot; </span>+ <span class="s2">&quot;/**&quot; </span>+ <span class="s2">&quot;</span><span class="s0">\r\n</span><span class="s2">&quot; </span>+ <span class="s2">&quot;*&quot; </span>+ resultSet.getString(<span class="s2">&quot;COMMENTS&quot;</span>) + <span class="s2">&quot;</span><span class="s0">\r\n</span><span class="s2">&quot; </span>+ <span class="s2">&quot;*/&quot;</span>);
+            }
+            stringBuffer.append(<span class="s2">&quot;</span><span class="s0">\r\n</span><span class="s2">&quot; </span>+ <span class="s2">&quot;private &quot; </span>+ GenerateUtils.toTypeByName(resultSet.getString(<span class="s2">&quot;DATA_TYPE&quot;</span>)) + <span class="s2">&quot;    &quot; </span>+ GenerateUtils.toUpper(resultSet.getString(<span class="s2">&quot;COLUMN_NAME&quot;</span>)) + <span class="s2">&quot;;&quot;</span>);
+        }
+        stringBuffer.append(<span class="s2">&quot;</span><span class="s0">\r\n</span><span class="s2">&quot; </span>+ <span class="s2">&quot;}&quot;</span>);
+        logger.info(<span class="s2">&quot;===============================================获取+&quot; </span>+ tableName + <span class="s2">&quot;表数据成功 ===============================================！&quot;</span>);
+        <span class="s0">return </span>stringBuffer.toString();
+    }
+
+    <span class="s0">public </span>String getInterfaceByTableName(String subPath, String tableName, String queryTableSql) {
+        StringBuilder stringBuilder = <span class="s0">new </span>StringBuilder();
+        <span class="s3">/**</span>
+         <span class="s3">* int deleteByPrimaryKey(Integer id);</span>
+         <span class="s3">*</span>
+         <span class="s3">*     int insert(user record);</span>
+         <span class="s3">*</span>
+         <span class="s3">* </span>
+         <span class="s3">*     int insertSelective(user record);</span>
+         <span class="s3">*</span>
+         <span class="s3">*     user selectByPrimaryKey(Integer id);</span>
+         <span class="s3">*</span>
+         <span class="s3">*     int updateByPrimaryKeySelective(user record);</span>
+         <span class="s3">*</span>
+         <span class="s3">*     int updateByPrimaryKey(user record);</span>
+         <span class="s3">*/</span>
+        logger.info(<span class="s2">&quot;===============================================生成的路径：+&quot; </span>+ subPath + <span class="s2">&quot;===============================================！&quot;</span>);
+        stringBuilder.append(<span class="s2">&quot;package  &quot; </span>+ subPath.toString() + <span class="s2">&quot;</span><span class="s0">\r\n</span><span class="s2">&quot; </span>+ <span class="s2">&quot;</span><span class="s0">\r\n</span><span class="s2">&quot; </span>+ <span class="s2">&quot;</span><span class="s0">\r\n</span><span class="s2">&quot;</span>);
+        stringBuilder.append(<span class="s2">&quot;public  interface &quot; </span>+ GenerateUtils.toUpper(tableName) + <span class="s2">&quot;Mapper{&quot;</span>);
+        stringBuilder.append(<span class="s2">&quot;int deleteByPrimaryKey(Integer id);&quot;</span>);
+        stringBuilder.append(<span class="s2">&quot;int insertSelective(&quot;</span>+GenerateUtils.toUpper(tableName)+<span class="s2">&quot; record);&quot;</span>);
+        stringBuilder.append(GenerateUtils.toUpper(tableName)+<span class="s2">&quot;selectByPrimaryKey(Integer id);&quot;</span>);
+        stringBuilder.append(GenerateUtils.toUpper(tableName)+<span class="s2">&quot;selectByPrimaryKey(Integer id);&quot;</span>);
+        stringBuilder.append(<span class="s2">&quot;int updateByPrimaryKeySelective(user record);&quot;</span>);
+        stringBuilder.append(<span class="s2">&quot;int updateByPrimaryKey(user record);&quot;</span>);
+        stringBuilder.append(<span class="s2">&quot;</span><span class="s0">\r\n</span><span class="s2">&quot; </span>+ <span class="s2">&quot;}&quot;</span>);
+
+        logger.info(<span class="s2">&quot;===============================================获取+&quot; </span>+ tableName + <span class="s2">&quot;表数据成功 ===============================================！&quot;</span>);
+        <span class="s0">return </span>stringBuilder.toString();
+    }
+
+    <span class="s0">public  void  </span>readFile(String  data ,String  listPath,String tableName) <span class="s0">throws </span>IOException {
+        File file = <span class="s0">new </span>File(listPath);
+        <span class="s0">if </span>(!file.exists()) {<span class="s3">//如果文件夹不存在</span>
+            <span class="s0">boolean </span>mkdir = file.mkdirs();<span class="s3">//创建文件夹</span>
+            System.out.println(mkdir);
+        }
+        BufferedWriter bw = <span class="s0">new </span>BufferedWriter(<span class="s0">new </span>FileWriter(listPath + tableName + <span class="s2">&quot;.java&quot;</span>));
+        bw.write(data);
+        bw.close();
+        logger.info(<span class="s2">&quot;===============================================+&quot; </span>+ tableName + <span class="s2">&quot;+Java代码生成成功===============================================！&quot;</span>);
+
+    }
+
+}
+</pre>
+</body>
+</html>
