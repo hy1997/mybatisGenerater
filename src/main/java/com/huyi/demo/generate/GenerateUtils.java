@@ -83,7 +83,12 @@ public class GenerateUtils {
 
     }
 
-
+    /**
+     * 根据数据库类型转换成 Java基本类型
+     * @param dataType
+     * @return
+     * @throws SQLException
+     */
     public static String toTypeByName(String dataType) throws SQLException {
         switch (dataType) {
             case "VARCHAR2":

@@ -1,16 +1,9 @@
 package com.huyi.demo.generateData;
 
-import com.huyi.demo.Utils.StringUtils;
 import com.huyi.demo.generate.GenerateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 @Component
 public class GenerateJavaInterface extends GenerateDataCommon {
@@ -37,7 +30,7 @@ public class GenerateJavaInterface extends GenerateDataCommon {
          *
          *     int updateByPrimaryKey(user record);
          */
-        logger.info("===============================================生成的路径：+" + subPath + "===============================================！");
+        logger.info("生成的路径：+" + subPath + "");
         stringBuilder.append("package  " + subPath.toString() + "\r\n" + "\r\n" + "\r\n");
         stringBuilder.append("public  interface " + GenerateUtils.toTable(tableName) + "Mapper{");
         stringBuilder.append("int deleteByPrimaryKey(Integer id);");
@@ -46,8 +39,7 @@ public class GenerateJavaInterface extends GenerateDataCommon {
         stringBuilder.append("int updateByPrimaryKeySelective("+GenerateUtils.toTable(tableName) +" record);");
         stringBuilder.append("int updateByPrimaryKey("+GenerateUtils.toTable(tableName) +" record);");
         stringBuilder.append("\r\n" + "}");
-
-        logger.info("===============================================获取+" + tableName + "表数据成功 ===============================================！");
+        logger.info("获取+" + tableName + "表数据成功 ");
         return stringBuilder.toString();
     }
 
