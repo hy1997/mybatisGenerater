@@ -10,8 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class GenerateUtils {
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
-
     /**
      * 生成字段名称 首字母不用大写
      *
@@ -109,19 +107,19 @@ public class GenerateUtils {
      */
     public static String select(String dataBaseType, String str, String tableName, String schema) throws SQLException {
         //mysql
-        if (GenerateConstant.DATATYPE_MYSQL.equals(dataBaseType)) {
-            if (GenerateConstant.TABLES.equals(str)) {
+        if (GenerateEnum.DATATYPE_MYSQL.getArgs().equals(dataBaseType)) {
+            if (GenerateEnum.TABLES.getArgs().equals(str)) {
                 //根据schema 查出schema下所有表的信息
                 return "select TABLE_NAME from INFORMATION_SCHEMA.Columns where table_schema='" + schema + "'   group by TABLE_NAME";
-            } else if (GenerateConstant.COLUMN.equals(str)) {
+            } else if (GenerateEnum.COLUMN.getArgs().equals(str)) {
                 //mysql 查询库下面所有的表 的字段
                 return "select TABLE_NAME,COLUMN_NAME,COLUMN_COMMENT AS COMMENTS ,DATA_TYPE from INFORMATION_SCHEMA.Columns where table_schema='" + schema + "'  AND  table_name ='" + tableName + "'";
             }
             // oracle
-        } else if (GenerateConstant.DATATYPE_ORACLE.equals(dataBaseType)) {
-            if (GenerateConstant.TABLES.equals(str)) {
+        } else if (GenerateEnum.DATATYPE_ORACLE.getArgs().equals(dataBaseType)) {
+            if (GenerateEnum.TABLES.getArgs().equals(str)) {
                 return " select COLUMN_NAME,COMMENTS from  all_col_comments where  table_name='\" + table + \"'\";";
-            } else if (GenerateConstant.COLUMN.equals(str)) {
+            } else if (GenerateEnum.COLUMN.getArgs().equals(str)) {
                 return "select COLUMN_NAME,DATA_TYPE from  all_tab_columns where  table_name='\" + table + \"'\"";
             }
         }

@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.sql.*;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 @Service
 public class GenerateService {
@@ -30,7 +32,7 @@ public class GenerateService {
             logger.info("连接的数据类型为：" + dataBaseType);
             dataBas = conn.getCatalog();
             logger.info("连接的数据库名称为：" + dataBas );
-            String sql = GenerateUtils.select(dataBaseType, GenerateConstant.TABLES, dataBas);
+            String sql = GenerateUtils.select(dataBaseType, GenerateEnum.TABLES.getArgs(), dataBas);
             logger.info("获取到查询数据库下所有表SQL：" + sql );
             resultSet = GenerateUtils.getResultSet(conn, sql);
             logger.info("获取到结果集：" + resultSet );

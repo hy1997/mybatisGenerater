@@ -1,27 +1,16 @@
 package com.huyi.demo.generate;
 
-import com.huyi.demo.Utils.StringUtils;
 import com.huyi.demo.generateData.CommonComponent;
 import com.huyi.demo.generateData.GenerateJavaFile;
 import com.huyi.demo.generateData.GenerateJavaInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.locks.Lock;
 
 @Component
 public class Assemble {
@@ -53,7 +42,7 @@ public class Assemble {
                 // 获取到 resultSet 结果集下的表名
                 String tableName = resultSet.getString("TABLE_NAME");
                 //获取到查询数据库下所有表 sql
-                String queryTableSql = GenerateUtils.select(dataBaseType, GenerateConstant.COLUMN, tableName, dataBas);
+                String queryTableSql = GenerateUtils.select(dataBaseType, GenerateEnum.COLUMN.getArgs(), tableName, dataBas);
                 //生成表
                 comm.generateDate(comm.setGenerateData(generateJavaFile).assembly(tableName, queryTableSql),tableName);
                 //生成的接口
