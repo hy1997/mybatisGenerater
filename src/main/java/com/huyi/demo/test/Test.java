@@ -6,13 +6,13 @@ public class Test {
     }
 
     public   String Demo(){
-        System.out.println(1);
+        System.out.println(2);
         return "!2";
     }
 
   public void   demo()
   {
-      System.out.println(#);
+      System.out.println("#");
   }
     
 }
