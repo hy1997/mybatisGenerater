@@ -6,7 +6,7 @@ public class Test {
     }
 
     public   String Demo(){
-        System.out.println(2);
+        System.out.println(8);
         return "!2";
     }
 
