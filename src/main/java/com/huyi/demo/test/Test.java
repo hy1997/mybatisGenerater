@@ -18,4 +18,9 @@ public class Test {
     {
         System.out.println("#23");
     }
+
+    public void   testB123ranch()
+    {
+        System.out.println("#23");
+    }
 }
