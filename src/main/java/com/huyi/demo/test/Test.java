@@ -14,5 +14,8 @@ public class Test {
   {
       System.out.println("#23");
   }
-    
+    public void   testBranch()
+    {
+        System.out.println("#23");
+    }
 }
