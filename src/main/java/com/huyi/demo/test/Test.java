@@ -5,22 +5,8 @@ public class Test {
         System.out.println(2);
     }
 
-    public   String Demo(){
-        System.out.println(8);
-        return "!2";
-    }
-
-  public void   demo()
-  {
-      System.out.println("#23");
+    public   String dev(){
+      System.out.println(8);
+      return "!2";
   }
-    public void   testBranch()
-    {
-        System.out.println("#23");
-    }
-
-    public void   testB123ranch()
-    {
-        System.out.println("#23");
-    }
 }
