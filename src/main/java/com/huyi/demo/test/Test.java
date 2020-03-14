@@ -9,4 +9,8 @@ public class Test {
     {
         System.out.println("#23");
     }
+    public void   uat1()
+    {
+        System.out.println("#23");
+    }
 }
