@@ -9,4 +9,10 @@ public class Test {
         System.out.println(1);
         return "!2";
     }
+
+  public void   demo()
+  {
+      System.out.println(#);
+  }
+    
 }
